@@ -1,6 +1,7 @@
 import { Input } from "../components/Input";
 import { LuPiggyBank } from "react-icons/lu";
 import jacare from "../assets/jacare-regando-planta.png";
+import { Link } from "react-router-dom";
 
 function Login() {
   return (
@@ -23,12 +24,12 @@ function Login() {
           >
             Login
           </button>
-          <button
-            type="button"
+          <Link
+            to="/signup"
             className="text-zinc-800 bg-zinc-50 p-4 text-center border-zinc-800 border shadow-lg rounded-3xl"
           >
             Sign Up
-          </button>
+          </Link>
         </div>
       </div>
       <div className="bg-violet-100 hidden lg:flex lg:col-span-8 justify-center items-center">
