@@ -1,6 +1,7 @@
 import { Input } from "../components/Input";
 import { LuPiggyBank } from "react-icons/lu";
 import jacare from "../assets/jacare-regando-planta.png";
+import { Link } from "react-router-dom";
 
 function SignUp() {
   return (
@@ -33,12 +34,12 @@ function SignUp() {
           >
             Create Account
           </button>
-          <button
-            type="button"
+          <Link
+            to="/"
             className="text-zinc-800 bg-zinc-50 p-4 text-center border-zinc-800 border shadow-lg rounded-3xl"
           >
             Back
-          </button>
+          </Link>
         </div>
       </div>
     </div>
