@@ -2,8 +2,47 @@ import { Input } from "../components/Input";
 import { LuPiggyBank } from "react-icons/lu";
 import jacare from "../assets/jacare-regando-planta.png";
 import { Link } from "react-router-dom";
+import { api } from "../services/api";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+interface IFormInputs {
+  name: string;
+  email: string;
+  password: string;
+}
+
+const schema = yup.object().shape({
+  name: yup
+    .string()
+    .min(3, "Nome deve ter pelo menos 3 caracteres")
+    .required("Nome é obrigatório"),
+  email: yup.string().email("Email inválido").required("Email é obrigatório"),
+  password: yup
+    .string()
+    .required("Senha é obrigatória")
+    .min(3, "A senha deve ter no mínimo 3 caracteres"),
+});
 
 function SignUp() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormInputs>({
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmit = async (newUser: IFormInputs) => {
+    try {
+      await api.post("users", newUser);
+      alert("usuário criado com sucesso!");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="h-screen grid grid-cols-1 lg:grid-cols-12">
       <div className="bg-violet-100 hidden lg:flex lg:col-span-8 justify-center items-center">
@@ -22,18 +61,36 @@ function SignUp() {
             Create Your Account
           </h1>
         </div>
-        <form className="flex flex-col gap-8 w-full p-4">
-          <Input label="Name" type="text" required />
-          <Input label="Email" type="email" required />
-          <Input label="Password" type="password" required />
-        </form>
-        <div className="flex flex-col gap-5 px-4 w-full">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-8 w-full p-4"
+        >
+          <Input
+            label="Name"
+            type="text"
+            {...register("name")}
+            error={errors.name ? errors.name.message : ""}
+          />
+          <Input
+            label="Email"
+            type="email"
+            {...register("email")}
+            error={errors.email ? errors.email.message : ""}
+          />
+          <Input
+            label="Password"
+            type="password"
+            {...register("password")}
+            error={errors.password ? errors.password.message : ""}
+          />
           <button
-            type="button"
+            type="submit"
             className="text-zinc-50 bg-zinc-800 p-4 text-center rounded-3xl"
           >
             Create Account
           </button>
+        </form>
+        <div className="flex flex-col gap-5 px-4 w-full">
           <Link
             to="/"
             className="text-zinc-800 bg-zinc-50 p-4 text-center border-zinc-800 border shadow-lg rounded-3xl"
