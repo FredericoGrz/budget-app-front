@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { api } from "../services/api";
 import axios from "axios";
+import { useToast } from "../components/ui/use-toast";
 
 type signInProps = {
   email: string;
@@ -26,6 +27,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     user: null,
     token: "",
   });
+  const { toast } = useToast();
 
   async function signIn({ email, password }: signInProps) {
     try {
@@ -35,8 +37,19 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       localStorage.setItem("@budgetapp:token", token);
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       setData({ user, token });
+
+      toast({
+        title: "Success",
+        description: "Login Successfully",
+        variant: "success",
+      });
     } catch (error) {
-      if (axios.isAxiosError(error)) alert(error.response?.data.message);
+      if (axios.isAxiosError(error))
+        toast({
+          title: "Error",
+          description: error.response?.data.message,
+          variant: "error",
+        });
       else console.log(error);
     }
   }
