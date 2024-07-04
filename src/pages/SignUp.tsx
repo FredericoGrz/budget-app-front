@@ -1,11 +1,13 @@
 import { Input } from "../components/Input";
 import { LuPiggyBank } from "react-icons/lu";
 import jacare from "../assets/jacare-regando-planta.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useToast } from "../components/ui/use-toast";
+import { CustomError } from "../types/errorTypes";
 
 interface IFormInputs {
   name: string;
@@ -26,6 +28,8 @@ const schema = yup.object().shape({
 });
 
 function SignUp() {
+  const { toast } = useToast();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -37,9 +41,23 @@ function SignUp() {
   const onSubmit = async (newUser: IFormInputs) => {
     try {
       await api.post("users", newUser);
-      alert("usuário criado com sucesso!");
+      toast({
+        title: "Success",
+        description: "User created with success",
+        variant: "success",
+      });
+      // Redirect to login page
+      navigate("/");
     } catch (error) {
-      console.error(error);
+      console.log(error);
+      const typedError = error as CustomError;
+      const errorMessage = typedError.response?.data?.message;
+
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "error",
+      });
     }
   };
 
