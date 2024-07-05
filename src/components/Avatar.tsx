@@ -15,7 +15,7 @@ export function Avatar() {
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          className="w-16 h-16 rounded-full bg-blue-50 pl-0.5 text-2xl border border-blue-200 text-blue-700"
+          className="w-16 h-16 rounded-full bg-violet-100 pl-0.5 text-2xl border border-violet-200 text-violet-700 hover:scale-105 hover:shadow-lg transition-transform"
         >
           {userInitial}
         </button>
