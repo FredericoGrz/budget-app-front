@@ -7,6 +7,9 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table";
+import { api } from "../services/api";
+import { useToast } from "./ui/use-toast";
+import { CustomError } from "../types/errorTypes";
 
 type TableProps = {
   data: {
@@ -16,11 +19,33 @@ type TableProps = {
     value: number;
   }[];
   type: "expense" | "income";
+  onUpdate: () => void;
 };
 
-export function Table({ data, type }: TableProps) {
+export function Table({ data, type, onUpdate }: TableProps) {
+  const { toast } = useToast();
+
   async function handleDelete(id: number) {
     // Delete the item
+    try {
+      await api.delete(`${type}s/${id}`);
+      onUpdate();
+
+      toast({
+        title: "Success",
+        description: `${type.charAt(0).toUpperCase() + type.slice(1)} deleted!`,
+        variant: "success",
+      });
+    } catch (error) {
+      const typedError = error as CustomError;
+      const errorMessage = typedError.response?.data?.message;
+
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "error",
+      });
+    }
   }
 
   async function handleUpdate(id: number) {
@@ -30,9 +55,9 @@ export function Table({ data, type }: TableProps) {
     <ShadTable>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[40%]">Description</TableHead>
+          <TableHead className="w-[30%]">Description</TableHead>
           <TableHead className="w-[40%]">Date</TableHead>
-          <TableHead>Value</TableHead>
+          <TableHead className="w-[20%]">Value</TableHead>
           <TableHead>Actions</TableHead>
         </TableRow>
       </TableHeader>
