@@ -7,6 +7,7 @@ import { api } from "../services/api";
 import { Table } from "../components/Table";
 import { Tabs } from "../components/Tabs";
 import { format } from "date-fns";
+import { AddDialog } from "../components/AddDialog";
 
 type datafechedProps = {
   id: number;
@@ -14,7 +15,7 @@ type datafechedProps = {
   description: string;
   created_at: string;
   updated_at: string;
-  value: number;
+  value: number | string;
 };
 
 function Dashboard() {
@@ -22,67 +23,86 @@ function Dashboard() {
   const [incomes, setIncomes] = useState([]);
   const [expenses, setExpenses] = useState([]);
 
-  const incomeContent = () => <Table data={incomes} type="income" />;
-  const expenseContent = () => <Table data={expenses} type="expense" />;
+  function onIncomeUpdated() {
+    fetchIncomes();
+  }
+  function onExpenseUpdated() {
+    fetchExpenses();
+  }
+
+  const incomeContent = () => (
+    <Table data={incomes} onUpdate={onIncomeUpdated} type="income" />
+  );
+  const expenseContent = () => (
+    <Table data={expenses} onUpdate={onExpenseUpdated} type="expense" />
+  );
 
   function generateTabContents() {
     return [
-      { value: "Income", content: incomeContent() },
       { value: "Expense", content: expenseContent() },
+      { value: "Income", content: incomeContent() },
     ];
   }
 
+  async function fetchIncomes() {
+    try {
+      const response = await api.get("incomes");
+
+      response.data.map((income: datafechedProps) => {
+        income.created_at = format(
+          new Date(income.created_at),
+          "MM/dd/yyyy hh:mm a"
+        );
+        income.value = `$ ${income.value}`;
+      });
+
+      setIncomes(response.data);
+    } catch (error) {
+      console.log(error);
+      const typedError = error as CustomError;
+      const errorMessage = typedError.response?.data?.message;
+
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "error",
+      });
+    }
+  }
+
+  async function fetchExpenses() {
+    try {
+      const response = await api.get("expenses");
+
+      response.data.map((expense: datafechedProps) => {
+        expense.created_at = format(
+          new Date(expense.created_at),
+          "MM/dd/yyyy hh:mm a"
+        );
+
+        expense.value = `$ ${expense.value}`;
+      });
+
+      setExpenses(response.data);
+    } catch (error) {
+      console.log(error);
+      const typedError = error as CustomError;
+      const errorMessage = typedError.response?.data?.message;
+
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "error",
+      });
+    }
+  }
+
+  function dialogUpdate(type: string) {
+    if (type === "income") fetchIncomes();
+    else fetchExpenses();
+  }
+
   useEffect(() => {
-    async function fetchIncomes() {
-      try {
-        const response = await api.get("incomes");
-
-        response.data.map((income: datafechedProps) => {
-          income.created_at = format(
-            new Date(income.created_at),
-            "MM/dd/yyyy hh:mm a"
-          );
-        });
-
-        setIncomes(response.data);
-      } catch (error) {
-        console.log(error);
-        const typedError = error as CustomError;
-        const errorMessage = typedError.response?.data?.message;
-
-        toast({
-          title: "Error",
-          description: errorMessage,
-          variant: "error",
-        });
-      }
-    }
-
-    async function fetchExpenses() {
-      try {
-        const response = await api.get("expenses");
-
-        response.data.map((expense: datafechedProps) => {
-          expense.created_at = format(
-            new Date(expense.created_at),
-            "MM/dd/yyyy hh:mm a"
-          );
-        });
-
-        setExpenses(response.data);
-      } catch (error) {
-        console.log(error);
-        const typedError = error as CustomError;
-        const errorMessage = typedError.response?.data?.message;
-
-        toast({
-          title: "Error",
-          description: errorMessage,
-          variant: "error",
-        });
-      }
-    }
-
     fetchIncomes();
     fetchExpenses();
   }, []);
@@ -95,12 +115,15 @@ function Dashboard() {
       </div>
 
       {incomes.length > 0 && (
-        <div className="col-span-2">
-          <Tabs defaultValue="income" contents={generateTabContents()} />
+        <div className="col-span-2 relative">
+          <Tabs defaultValue="expense" contents={generateTabContents()} />
+          <AddDialog
+            className="absolute top-0 right-4 lg:hidden"
+            onUpdate={dialogUpdate}
+          />
         </div>
       )}
     </div>
   );
 }
-
 export default Dashboard;
