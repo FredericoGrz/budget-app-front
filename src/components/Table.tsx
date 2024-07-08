@@ -14,22 +14,36 @@ import { CustomError } from "../types/errorTypes";
 type TableProps = {
   data: {
     id: number;
+    user_id: number;
     description: string;
     created_at: string;
+    updated_at: string;
     value: number;
+    type: "expenses" | "incomes" | "";
   }[];
-  type: "expense" | "income";
-  onUpdate: () => void;
+  type: "expenses" | "incomes" | "";
+  dataUpdated: () => void;
+  updateItem: (item: dataProps) => void;
 };
 
-export function Table({ data, type, onUpdate }: TableProps) {
+type dataProps = {
+  id: number;
+  user_id: number;
+  description: string;
+  created_at: string;
+  updated_at: string;
+  value: number;
+  type: "expenses" | "incomes" | "";
+};
+
+export function Table({ data, type, dataUpdated, updateItem }: TableProps) {
   const { toast } = useToast();
 
   async function handleDelete(id: number) {
     // Delete the item
     try {
-      await api.delete(`${type}s/${id}`);
-      onUpdate();
+      await api.delete(`${type}/${id}`);
+      dataUpdated();
 
       toast({
         title: "Success",
@@ -48,8 +62,8 @@ export function Table({ data, type, onUpdate }: TableProps) {
     }
   }
 
-  async function handleUpdate(id: number) {
-    // Update the item
+  async function handleUpdate(item: dataProps) {
+    if (updateItem) updateItem(item);
   }
   return (
     <ShadTable>
@@ -66,9 +80,9 @@ export function Table({ data, type, onUpdate }: TableProps) {
           <TableRow key={item.id}>
             <TableCell>{item.description}</TableCell>
             <TableCell>{item.created_at}</TableCell>
-            <TableCell>{item.value}</TableCell>
+            <TableCell>$ {item.value}</TableCell>
             <TableCell className="flex gap-2">
-              <button type="button" onClick={() => handleUpdate(item.id)}>
+              <button type="button" onClick={() => handleUpdate(item)}>
                 <FaEdit className="text-lg text-blue-400 hover:text-blue-600 hover:scale-110 transition-all" />
               </button>
               <button type="button" onClick={() => handleDelete(item.id)}>

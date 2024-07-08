@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "./Input";
 import { Select } from "./Select";
 import {
@@ -12,68 +12,64 @@ import {
 } from "./ui/dialog";
 
 import { FaPlus } from "react-icons/fa";
-import { api } from "../services/api";
-import { useToast } from "./ui/use-toast";
-import { CustomError } from "../types/errorTypes";
+
+interface SubmitProps {
+  desc: string;
+  amt: number;
+}
+
+interface updateProps {
+  id: number;
+  desc: string;
+  amt: number;
+  type: "expenses" | "incomes" | "";
+}
 
 type AddDialogProps = {
   className?: string;
-  onUpdate: (type: string) => void;
+  onUpdate: (props: updateProps) => void;
+  onSubmit: (props: SubmitProps) => void;
+  isUpdate?: boolean;
+  description: string;
+  setDescription: React.Dispatch<React.SetStateAction<string>>;
+  amount: number;
+  setAmount: React.Dispatch<React.SetStateAction<number>>;
+  type: "expenses" | "incomes" | "";
+  setType: React.Dispatch<React.SetStateAction<"expenses" | "incomes" | "">>;
+  id: number;
+  resetFields: () => void;
 };
 
-export function AddDialog({ className = "", onUpdate }: AddDialogProps) {
-  const { toast } = useToast();
-  const [type, setType] = useState("");
-  const [description, setDescription] = useState("");
-  const [amount, setAmount] = useState(0);
+export function AddDialog({
+  className = "",
+  onUpdate,
+  onSubmit,
+  description,
+  setDescription,
+  amount,
+  setAmount,
+  type,
+  setType,
+  id,
+  resetFields,
+}: AddDialogProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  async function handleSubmit() {
-    if (validate()) {
-      try {
-        await api.post(`${type}s`, { description, value: amount });
-        toast({
-          title: "Success",
-          description: `${
-            type.charAt(0).toUpperCase() + type.slice(1)
-          } created!`,
-          variant: "success",
-        });
+  function handleSubmit() {
+    onSubmit({ desc: description, amt: amount });
+  }
 
-        if (onUpdate) {
-          onUpdate(type);
-        }
+  function handleUpdate() {
+    onUpdate({ desc: description, amt: amount, id, type });
+  }
 
-        setType("");
-        setDescription("");
-        setAmount(0);
-        setIsDialogOpen(false);
-      } catch (error) {
-        console.log(error);
-        const typedError = error as CustomError;
-        const errorMessage = typedError.response?.data?.message;
-
-        toast({
-          title: "Error",
-          description: errorMessage,
-          variant: "error",
-        });
-      }
+  useEffect(() => {
+    if (id > 0) {
+      setIsDialogOpen(true);
     } else {
-      toast({
-        title: "Error",
-        description: "Verify the fields and try again",
-        variant: "error",
-      });
+      setIsDialogOpen(false);
     }
-  }
-
-  function validate() {
-    if (type !== "expense" && type !== "income") return false;
-    else if (description === "") return false;
-    else if (amount === 0) return false;
-    return true;
-  }
+  }, [id]);
 
   return (
     <Dialog
@@ -87,15 +83,18 @@ export function AddDialog({ className = "", onUpdate }: AddDialogProps) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add New</DialogTitle>
-          <DialogDescription>Add a new Income/Expense</DialogDescription>
+          <DialogTitle>{id ? `Update ${description}` : "Add New"}</DialogTitle>
+          <DialogDescription>
+            {id ? `Update ${type}` : "Add a new Income/Expense"}
+          </DialogDescription>
         </DialogHeader>
         <form action="" className="flex flex-col gap-2">
           <Select
+            className={id ? "hidden" : ""}
             label="Type"
             items={[
-              { label: "Expense", value: "expense" },
-              { label: "Income", value: "income" },
+              { label: "Expense", value: "expenses" },
+              { label: "Income", value: "incomes" },
             ]}
             onChange={(type) => setType(type)}
           />
@@ -113,13 +112,22 @@ export function AddDialog({ className = "", onUpdate }: AddDialogProps) {
             onChange={(e) => setAmount(Number(e.target.value))}
           />
         </form>
-        <DialogFooter>
+        <DialogFooter className="w-full flex flex-row gap-2">
           <button
-            type="submit"
-            className="text-white bg-violet-500 p-2 rounded-full"
-            onClick={handleSubmit}
+            type="button"
+            className="text-white bg-violet-500 p-2 rounded-full w-full"
+            onClick={id ? handleUpdate : handleSubmit}
           >
-            Create
+            {id ? "Update" : "Create"}
+          </button>
+          <button
+            type="button"
+            className={`text-white bg-zinc-300 p-2 rounded-full w-1/3 ${
+              id ? "block" : "hidden"
+            }`}
+            onClick={resetFields}
+          >
+            Cancel
           </button>
         </DialogFooter>
       </DialogContent>

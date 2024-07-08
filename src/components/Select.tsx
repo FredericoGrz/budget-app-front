@@ -10,14 +10,25 @@ import {
 
 type SelectProps = {
   label: string;
+  value?: string;
   items: { value: string; label: string }[];
-  onChange: (value: string) => void;
+  onChange: (value: "expenses" | "incomes") => void;
+  className?: string;
 };
 
-export function Select({ label, items, onChange }: SelectProps) {
+export function Select({
+  label,
+  items,
+  value,
+  className,
+  onChange,
+}: SelectProps) {
   return (
-    <SelectShad onValueChange={(value) => onChange(value)}>
-      <SelectTrigger className=" border-zinc-700">
+    <SelectShad
+      value={value}
+      onValueChange={(value: "expenses" | "incomes") => onChange(value)}
+    >
+      <SelectTrigger className={`border-zinc-700 ${className}`}>
         <SelectValue placeholder={label} />
       </SelectTrigger>
       <SelectContent>
