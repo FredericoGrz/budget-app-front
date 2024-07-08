@@ -11,6 +11,7 @@ import { AddDialog } from "../components/AddDialog";
 import { Input } from "../components/Input";
 import { Select } from "../components/Select";
 import { useMediaQuery } from "react-responsive";
+import { DolarInput } from "../components/DolarInput";
 
 type datafechedProps = {
   id: number;
@@ -278,12 +279,11 @@ function Dashboard() {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
-          <Input
+          <DolarInput
             label="Amount"
             name="amount"
-            type="number"
             value={amount}
-            onChange={(e) => setAmount(Number(e.target.value))}
+            onValueChange={(value) => setAmount(Number(value))}
           />
           <div className="w-full flex gap-2">
             <button

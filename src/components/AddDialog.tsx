@@ -12,6 +12,7 @@ import {
 } from "./ui/dialog";
 
 import { FaPlus } from "react-icons/fa";
+import { DolarInput } from "./DolarInput";
 
 interface SubmitProps {
   desc: string;
@@ -104,12 +105,11 @@ export function AddDialog({
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
-          <Input
+          <DolarInput
             label="Amount"
-            type="number"
             name="amount"
             value={amount}
-            onChange={(e) => setAmount(Number(e.target.value))}
+            onValueChange={(value) => setAmount(Number(value))}
           />
         </form>
         <DialogFooter className="w-full flex flex-row gap-2">
