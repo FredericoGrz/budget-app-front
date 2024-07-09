@@ -293,7 +293,7 @@ function Dashboard() {
         {/* Desktop Transaction Form */}
         <form className="hidden lg:flex flex-col gap-10 lg:col-span-4 py-14 border p-4 rounded-xl shadow-xl h-fit">
           <p className="text-xl text-violet-700 font-bold">
-            {id ? `Update ${description}` : "Add New"}
+            {id ? `Update ${description}` : `Add New ${type.slice(0, -1)}`}
           </p>
           <p className={`text-lg text-violet-500 -mt-10 ${id ? "" : "hidden"}`}>
             {id && type.charAt(0).toUpperCase() + type.slice(1)}
