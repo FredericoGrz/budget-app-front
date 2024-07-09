@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Input } from "./Input";
 import { Select } from "./Select";
 import {
@@ -39,6 +39,8 @@ type AddDialogProps = {
   setType: React.Dispatch<React.SetStateAction<"expenses" | "incomes" | "">>;
   id: number;
   resetFields: () => void;
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export function AddDialog({
@@ -53,9 +55,9 @@ export function AddDialog({
   setType,
   id,
   resetFields,
+  isOpen,
+  setIsOpen,
 }: AddDialogProps) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-
   function handleSubmit() {
     onSubmit({ desc: description, amt: amount });
   }
@@ -66,17 +68,14 @@ export function AddDialog({
 
   useEffect(() => {
     if (id > 0) {
-      setIsDialogOpen(true);
+      setIsOpen(true);
     } else {
-      setIsDialogOpen(false);
+      setIsOpen(false);
     }
   }, [id]);
 
   return (
-    <Dialog
-      open={isDialogOpen}
-      onOpenChange={(value) => setIsDialogOpen(value)}
-    >
+    <Dialog open={isOpen} onOpenChange={(value) => setIsOpen(value)}>
       <DialogTrigger
         className={`p-2 bg-violet-200 rounded-full hover:scale-110 transition-transform ${className}`}
       >

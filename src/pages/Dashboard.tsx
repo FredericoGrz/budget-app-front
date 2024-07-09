@@ -33,6 +33,7 @@ function Dashboard() {
   const [id, setId] = useState(0);
   const [expensesTotal, setExpensesTotal] = useState(0);
   const [budgetAvailable, setBudgetAvailable] = useState(0);
+  const [addDialogIsOpen, setAddDialogIsOpen] = useState(false);
 
   const isLg = useMediaQuery({ minWidth: 1024 });
 
@@ -83,6 +84,7 @@ function Dashboard() {
     setDescription("");
     setAmount(0);
     setId(0);
+    setAddDialogIsOpen(false);
   }
 
   async function handleUpdate({
@@ -252,6 +254,7 @@ function Dashboard() {
   return (
     <div className="min-h-screen w-full bg-zinc-50 flex flex-col">
       <Header budgetAvailable={budgetAvailable} spent={expensesTotal} />
+      {/* Cards Mobile Budget and Spent */}
       <div className="grid grid-cols-2 gap-2 p-4 lg:hidden">
         <CardMoney
           value={budgetAvailable}
@@ -264,6 +267,7 @@ function Dashboard() {
           className="col-span-1 h-32"
         />
       </div>
+
       <div className="flex-1 grid grid-cols-2 lg:grid-cols-12 gap-8 p-4">
         {/* Tabs + Mobile Transaction modal form  */}
         <div className="relative col-span-2 lg:col-span-8">
@@ -281,6 +285,8 @@ function Dashboard() {
               onUpdate={handleUpdate}
               onSubmit={handleSubmit}
               resetFields={resetFields}
+              isOpen={addDialogIsOpen}
+              setIsOpen={setAddDialogIsOpen}
             />
           )}
         </div>
