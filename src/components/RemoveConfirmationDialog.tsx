@@ -33,10 +33,10 @@ export function RemoveConfirmationDialog({
             delete this transaction?
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="mt-2 flex gap-2 justify-end items-center">
+        <DialogFooter className="mt-2 flex flex-row gap-2 justify-end items-center">
           <button
             type="button"
-            className="text-white bg-red-500 p-2 rounded-xl w-full hover:bg-red-600 transition-colors"
+            className="text-white bg-red-500 p-2 rounded-xl w-2/3 lg:w-full hover:bg-red-600 transition-colors"
             onClick={handleRemove}
           >
             Delete
