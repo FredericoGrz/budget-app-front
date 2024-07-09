@@ -265,6 +265,7 @@ function Dashboard() {
         />
       </div>
       <div className="flex-1 grid grid-cols-2 lg:grid-cols-12 gap-8 p-4">
+        {/* Tabs + Mobile Transaction modal form  */}
         <div className="relative col-span-2 lg:col-span-8">
           <Tabs defaultValue="expense" contents={generateTabContents()} />
           {!isLg && (
@@ -283,6 +284,7 @@ function Dashboard() {
             />
           )}
         </div>
+        {/* Desktop Transaction Form */}
         <form className="hidden lg:flex flex-col gap-10 lg:col-span-4 py-14 border p-4 rounded-xl shadow-xl h-fit">
           <p className="text-xl text-violet-700 font-bold">
             {id ? `Update ${description}` : "Add New"}
