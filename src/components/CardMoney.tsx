@@ -9,18 +9,18 @@ type CardMoneyProps = {
 export function CardMoney({ value, type, className = "" }: CardMoneyProps) {
   return (
     <Card className={`shadow-lg ${className}`}>
-      <CardHeader className="text-center flex flex-col gap-3">
+      <CardHeader className="text-center flex flex-col gap-1 xs:gap-3">
         <CardTitle
           className={`text-${
             type === "spent" ? "yellow" : "green"
-          }-700 text-lg`}
+          }-700 text-sm xs:text-base sm:text-lg`}
         >
           {type === "spent" ? "Spent" : "Budget Available"}
         </CardTitle>
         <CardDescription
           className={`text-${
             type === "spent" ? "yellow" : "green"
-          }-700 text-xl font-medium`}
+          }-700 text-base xs:text-lg sm:text-xl font-medium`}
         >
           $ {value.toFixed(2)}
         </CardDescription>

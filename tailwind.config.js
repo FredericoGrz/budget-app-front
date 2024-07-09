@@ -19,6 +19,9 @@ export default {
       },
     },
     extend: {
+      screens: {
+        xs: "400px",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
