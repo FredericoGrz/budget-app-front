@@ -31,6 +31,8 @@ function Dashboard() {
   const [description, setDescription] = useState<string>("");
   const [amount, setAmount] = useState<number>(0);
   const [id, setId] = useState(0);
+  const [expensesTotal, setExpensesTotal] = useState(0);
+  const [budgetAvailable, setBudgetAvailable] = useState(0);
 
   const isLg = useMediaQuery({ minWidth: 1024 });
 
@@ -230,12 +232,37 @@ function Dashboard() {
     fetchExpenses();
   }, []);
 
+  useEffect(() => {
+    let inc;
+    let exp;
+    if (incomes.length > 0) {
+      inc = incomes.reduce((acc, income) => acc + Number(income.value), 0);
+    } else inc = 0;
+
+    if (expenses.length > 0) {
+      exp = expenses.reduce((acc, expense) => acc + Number(expense.value), 0);
+    } else exp = 0;
+
+    const budget = inc - exp;
+
+    setExpensesTotal(exp);
+    setBudgetAvailable(budget);
+  }, [expenses, incomes]);
+
   return (
     <div className="min-h-screen w-full bg-zinc-50 flex flex-col">
-      <Header />
+      <Header budgetAvailable={budgetAvailable} spent={expensesTotal} />
       <div className="grid grid-cols-2 gap-2 p-4 lg:hidden">
-        <CardMoney type="budget" className="col-span-1 h-32" />
-        <CardMoney type="spent" className="col-span-1 h-32" />
+        <CardMoney
+          value={budgetAvailable}
+          type="budget"
+          className="col-span-1 h-32"
+        />
+        <CardMoney
+          type="spent"
+          value={expensesTotal}
+          className="col-span-1 h-32"
+        />
       </div>
       <div className="flex-1 grid grid-cols-2 lg:grid-cols-12 gap-8 p-4">
         <div className="relative col-span-2 lg:col-span-8">
