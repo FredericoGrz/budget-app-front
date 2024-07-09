@@ -59,21 +59,21 @@ function Login() {
             {...register("password")}
             error={errors.password ? errors.password.message : ""}
           />
+          <div className="flex flex-col gap-5 w-full">
+            <button
+              onClick={handleSubmit(onSubmit)}
+              className="text-zinc-50 bg-zinc-800 p-4 text-center rounded-3xl"
+            >
+              Login
+            </button>
+            <Link
+              to="/signup"
+              className="text-zinc-800 bg-zinc-50 p-4 text-center border-zinc-800 border shadow-lg rounded-3xl"
+            >
+              Sign Up
+            </Link>
+          </div>
         </form>
-        <div className="flex flex-col gap-5 px-4 w-full">
-          <button
-            onClick={handleSubmit(onSubmit)}
-            className="text-zinc-50 bg-zinc-800 p-4 text-center rounded-3xl"
-          >
-            Login
-          </button>
-          <Link
-            to="/signup"
-            className="text-zinc-800 bg-zinc-50 p-4 text-center border-zinc-800 border shadow-lg rounded-3xl"
-          >
-            Sign Up
-          </Link>
-        </div>
       </div>
       <div className="bg-violet-100 hidden lg:flex lg:col-span-8 justify-center items-center">
         <div className="-mt-32 flex flex-col gap-4 items-center">
