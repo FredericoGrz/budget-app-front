@@ -1,4 +1,4 @@
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
 import {
   Table as ShadTable,
   TableBody,
@@ -10,6 +10,7 @@ import {
 import { api } from "../services/api";
 import { useToast } from "./ui/use-toast";
 import { CustomError } from "../types/errorTypes";
+import { RemoveConfirmationDialog } from "./RemoveConfirmationDialog";
 
 type TableProps = {
   data: {
@@ -81,12 +82,15 @@ export function Table({ data, type, dataUpdated, updateItem }: TableProps) {
             <TableCell>{item.description}</TableCell>
             <TableCell>{item.created_at}</TableCell>
             <TableCell>$ {item.value}</TableCell>
-            <TableCell className="flex gap-2">
+            <TableCell className="flex gap-2 ">
               <button type="button" onClick={() => handleUpdate(item)}>
                 <FaEdit className="text-lg text-blue-400 hover:text-blue-600 hover:scale-110 transition-all" />
               </button>
-              <button type="button" onClick={() => handleDelete(item.id)}>
-                <FaTrash className="text-lg text-red-400 hover:text-red-600 hover:scale-110 transition-all" />
+              <button type="button">
+                <RemoveConfirmationDialog
+                  handleRemove={() => handleDelete(item.id)}
+                  transactionName={item.description}
+                />
               </button>
             </TableCell>
           </TableRow>
