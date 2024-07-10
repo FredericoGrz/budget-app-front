@@ -1,11 +1,11 @@
 import { Input } from "../components/Input";
-import { LuPiggyBank } from "react-icons/lu";
 import jacare from "../assets/jacare-regando-planta.png";
 import { Link } from "react-router-dom";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuth } from "../hooks/use-auth";
+import budgetLogo from "../assets/budget-app-logo.png";
 
 interface IFormInputs {
   email: string;
@@ -36,8 +36,8 @@ function Login() {
     <div className="h-screen grid grid-cols-1 lg:grid-cols-12">
       <div className="bg-zinc-50 lg:col-span-4 lg:z-10 lg:shadow-right flex flex-col justify-evenly items-center p-4">
         <div className="flex flex-col items-center justify-between h-1/4">
-          <LuPiggyBank className="text-8xl xs:text-9xl text-zinc-700" />
-          <h1 className="text-xl xs:text-2xl font-medium text-zinc-700 text-center">
+          <img src={budgetLogo} alt="App Logo" className="h-32 w-32" />
+          <h1 className="text-xl xs:text-2xl font-medium text-violet-700 text-center">
             Welcome to Budget Web App
           </h1>
         </div>

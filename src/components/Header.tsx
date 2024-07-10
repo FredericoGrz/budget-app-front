@@ -2,6 +2,7 @@ import { useAuth } from "../hooks/use-auth";
 import { Avatar } from "./Avatar";
 import { StatusBudgetHeader } from "./StatusBudgetHeader";
 import { Skeleton } from "./ui/skeleton";
+import budgetapp from "../assets/budget-app-logo.png";
 
 type HeaderProps = {
   budgetAvailable: number;
@@ -18,7 +19,10 @@ export function Header({
   return (
     <div className="flex items-center justify-between xl:px-8 p-4">
       <div className="flex flex-col gap-4">
-        <p className="text-3xl text-violet-700">Budget App</p>
+        <div className="flex gap-4 items-center justify-center">
+          <img src={budgetapp} alt="Budget App Logo" className="h-16 w-16" />
+          <p className="text-3xl text-violet-700">Budget App</p>
+        </div>
         {user?.name && <p className="text-violet-500">Welcome {user.name}!</p>}
       </div>
       {isLoading ? (
