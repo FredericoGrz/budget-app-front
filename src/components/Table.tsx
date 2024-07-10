@@ -69,22 +69,27 @@ export function Table({ data, type, dataUpdated, updateItem }: TableProps) {
   return (
     <ShadTable>
       <TableHeader>
-        <TableRow>
-          <TableHead className="w-[30%] text-xs sm:text-sm xs:w-[35%] sm:w-[45%] lg:w-[54%] xl:w-[60%]">
+        <TableRow className="hover:bg-transparent">
+          <TableHead className="text-violet-800 w-[30%] text-xs sm:text-sm xs:w-[35%] sm:w-[45%] lg:w-[54%] xl:w-[60%]">
             Description
           </TableHead>
-          <TableHead className="w-[40%] text-xs sm:text-sm xs:w-[35%] sm:w-[35%] lg:w-[30%] xl:w-[22%]">
+          <TableHead className="text-violet-800 w-[40%] text-xs sm:text-sm xs:w-[35%] sm:w-[35%] lg:w-[30%] xl:w-[22%]">
             Date
           </TableHead>
-          <TableHead className="w-[20%] text-xs sm:text-sm xs:w-[30%] sm:w-[20%] lg:w-[16%] xl:w-[13%]">
+          <TableHead className="text-violet-800 w-[20%] text-xs sm:text-sm xs:w-[30%] sm:w-[20%] lg:w-[16%] xl:w-[13%]">
             Value
           </TableHead>
-          <TableHead className="text-xs sm:text-sm">Actions</TableHead>
+          <TableHead className="text-violet-800 text-xs sm:text-sm">
+            Actions
+          </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {data.map((item) => (
-          <TableRow key={item.id}>
+          <TableRow
+            key={item.id}
+            className="text-violet-700/80 hover:text-violet-800 hover:bg-violet-50 transition-colors"
+          >
             <TableCell className="text-xs sm:text-sm">
               {item.description}
             </TableCell>

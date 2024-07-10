@@ -44,7 +44,7 @@ export function RemoveConfirmationDialog({
           <DialogClose className="w-1/3">
             <button
               type="button"
-              className="text-white bg-zinc-300 p-2 rounded-xl w-full hover:bg-zinc-400 transition-colors"
+              className="text-white bg-violet-300 p-2 rounded-xl w-full hover:bg-violet-400 transition-colors"
             >
               Cancel
             </button>

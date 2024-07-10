@@ -48,6 +48,7 @@ function Login() {
           <Input
             label="Email"
             type="email"
+            variant="dark"
             required
             {...register("email")}
             error={errors.email ? errors.email.message : ""}
@@ -55,6 +56,7 @@ function Login() {
           <Input
             label="Password"
             type="password"
+            variant="dark"
             required
             {...register("password")}
             error={errors.password ? errors.password.message : ""}

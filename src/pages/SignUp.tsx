@@ -88,18 +88,21 @@ function SignUp() {
             type="text"
             {...register("name")}
             error={errors.name ? errors.name.message : ""}
+            variant="dark"
           />
           <Input
             label="Email"
             type="email"
             {...register("email")}
             error={errors.email ? errors.email.message : ""}
+            variant="dark"
           />
           <Input
             label="Password"
             type="password"
             {...register("password")}
             error={errors.password ? errors.password.message : ""}
+            variant="dark"
           />
           <button
             type="submit"

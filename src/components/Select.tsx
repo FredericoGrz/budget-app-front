@@ -28,7 +28,9 @@ export function Select({
       value={value}
       onValueChange={(value: "expenses" | "incomes") => onChange(value)}
     >
-      <SelectTrigger className={`border-zinc-700 ${className}`}>
+      <SelectTrigger
+        className={`border-violet-700 text-violet-700 ${className}`}
+      >
         <SelectValue placeholder={label} />
       </SelectTrigger>
       <SelectContent>

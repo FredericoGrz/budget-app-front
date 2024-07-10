@@ -20,7 +20,7 @@ export function DolarInput({
     <div className="flex flex-col gap-1 w-full">
       <label
         htmlFor={label}
-        className={`font-medium ${error && "text-red-600"}`}
+        className={`font-medium text-violet-700 ${error && "text-red-600"}`}
       >
         {label}
       </label>
@@ -34,8 +34,8 @@ export function DolarInput({
         displayType={"input"}
         id={name}
         name={name}
-        className={`w-full bg-transparent  text-zinc-600 placeholder:text-zinc-400 pl-0.5 outline-none ${
-          error ? "border-b-2 border-red-600" : "border-b border-zinc-600"
+        className={`w-full bg-transparent  text-violet-500 placeholder:text-violet-400 pl-0.5 outline-none ${
+          error ? "border-b-2 border-red-600" : "border-b border-violet-600"
         }`}
       />
 

@@ -83,8 +83,10 @@ export function AddDialog({
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{id ? `Update ${description}` : "Add New"}</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-violet-800">
+            {id ? `Update ${description}` : "Add New"}
+          </DialogTitle>
+          <DialogDescription className="text-violet-600">
             {id ? `Update ${type}` : "Add a new Income/Expense"}
           </DialogDescription>
         </DialogHeader>

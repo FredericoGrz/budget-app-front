@@ -15,14 +15,14 @@ export function Avatar() {
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          className="w-16 h-16 rounded-full bg-violet-100 pl-0.5 text-2xl border border-violet-200 text-violet-700 hover:scale-105 hover:shadow-lg transition-transform"
+          className="w-16 h-16 rounded-full bg-violet-100 pl-0.5 text-2xl cursor-pointer border border-violet-200 text-violet-700 hover:scale-105 hover:shadow-lg transition-transform"
         >
           {userInitial}
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem className="text-violet-700">
             <button type="button" onClick={signOut}>
               Logout
             </button>
