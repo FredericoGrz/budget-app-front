@@ -12,6 +12,7 @@ import { Input } from "../components/Input";
 import { Select } from "../components/Select";
 import { useMediaQuery } from "react-responsive";
 import { DolarInput } from "../components/DolarInput";
+import { Skeleton } from "../components/ui/skeleton";
 
 type datafechedProps = {
   id: number;
@@ -34,6 +35,7 @@ function Dashboard() {
   const [expensesTotal, setExpensesTotal] = useState(0);
   const [budgetAvailable, setBudgetAvailable] = useState(0);
   const [addDialogIsOpen, setAddDialogIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const isLg = useMediaQuery({ minWidth: 1024 });
 
@@ -179,6 +181,7 @@ function Dashboard() {
 
   async function fetchIncomes() {
     try {
+      setIsLoading(true);
       const response = await api.get("incomes");
 
       response.data.forEach((income: datafechedProps) => {
@@ -201,10 +204,12 @@ function Dashboard() {
         variant: "error",
       });
     }
+    setIsLoading(false);
   }
 
   async function fetchExpenses() {
     try {
+      setIsLoading(true);
       const response = await api.get("expenses");
 
       response.data.forEach((expense: datafechedProps) => {
@@ -227,6 +232,7 @@ function Dashboard() {
         variant: "error",
       });
     }
+    setIsLoading(false);
   }
 
   useEffect(() => {
@@ -235,6 +241,7 @@ function Dashboard() {
   }, []);
 
   useEffect(() => {
+    setIsLoading(true);
     let inc;
     let exp;
     if (incomes.length > 0) {
@@ -249,47 +256,66 @@ function Dashboard() {
 
     setExpensesTotal(exp);
     setBudgetAvailable(budget);
+    setIsLoading(false);
   }, [expenses, incomes]);
 
   return (
     <div className="min-h-screen w-full bg-zinc-50 flex flex-col">
-      <Header budgetAvailable={budgetAvailable} spent={expensesTotal} />
+      <Header
+        isLoading={isLoading}
+        budgetAvailable={budgetAvailable}
+        spent={expensesTotal}
+      />
       {/* Cards Mobile Budget and Spent */}
-      <div className="grid grid-cols-2 gap-2 p-4 lg:hidden">
-        <CardMoney
-          value={budgetAvailable}
-          type="budget"
-          className="col-span-1 h-32"
-        />
-        <CardMoney
-          type="spent"
-          value={expensesTotal}
-          className="col-span-1 h-32"
-        />
-      </div>
+      {isLoading ? (
+        <div className="grid grid-cols-2 gap-2 p-4 lg:hidden">
+          <Skeleton className="col-span-1 h-32" />
+          <Skeleton className="col-span-1 h-32" />
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-2 p-4 lg:hidden">
+          <CardMoney
+            value={budgetAvailable}
+            type="budget"
+            className="col-span-1 h-32"
+          />
+          <CardMoney
+            type="spent"
+            value={expensesTotal}
+            className="col-span-1 h-32"
+          />
+        </div>
+      )}
 
       <div className="flex-1 grid grid-cols-2 lg:grid-cols-12 gap-8 p-4">
         {/* Tabs + Mobile Transaction modal form  */}
-        <div className="relative col-span-2 lg:col-span-8">
-          <Tabs defaultValue="expense" contents={generateTabContents()} />
-          {!isLg && (
-            <AddDialog
-              className="absolute top-0 right-4 lg:hidden"
-              id={id}
-              type={type}
-              description={description}
-              amount={amount}
-              setDescription={setDescription}
-              setAmount={setAmount}
-              setType={setType}
-              onUpdate={handleUpdate}
-              onSubmit={handleSubmit}
-              resetFields={resetFields}
-              isOpen={addDialogIsOpen}
-              setIsOpen={setAddDialogIsOpen}
-            />
-          )}
-        </div>
+        {isLoading ? (
+          <div className="col-span-2 lg:col-span-8 flex flex-col gap-2">
+            <Skeleton className="w-36 h-10" />
+            <Skeleton className="w-full h-full" />
+          </div>
+        ) : (
+          <div className="relative col-span-2 lg:col-span-8">
+            <Tabs defaultValue="expense" contents={generateTabContents()} />
+            {!isLg && (
+              <AddDialog
+                className="absolute top-0 right-4 lg:hidden"
+                id={id}
+                type={type}
+                description={description}
+                amount={amount}
+                setDescription={setDescription}
+                setAmount={setAmount}
+                setType={setType}
+                onUpdate={handleUpdate}
+                onSubmit={handleSubmit}
+                resetFields={resetFields}
+                isOpen={addDialogIsOpen}
+                setIsOpen={setAddDialogIsOpen}
+              />
+            )}
+          </div>
+        )}
         {/* Desktop Transaction Form */}
         <form className="hidden lg:flex flex-col gap-10 lg:col-span-4 py-14 border p-4 rounded-xl shadow-xl h-fit">
           <p className="text-xl text-violet-700 font-bold">
