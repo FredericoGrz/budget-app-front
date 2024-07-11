@@ -11,6 +11,7 @@ import { api } from "../services/api";
 import { useToast } from "./ui/use-toast";
 import { CustomError } from "../types/errorTypes";
 import { RemoveConfirmationDialog } from "./RemoveConfirmationDialog";
+import { useState } from "react";
 
 type TableProps = {
   data: {
@@ -39,10 +40,12 @@ type dataProps = {
 
 export function Table({ data, type, dataUpdated, updateItem }: TableProps) {
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleDelete(id: number) {
     // Delete the item
     try {
+      setIsSubmitting(true);
       await api.delete(`${type}/${id}`);
       dataUpdated();
 
@@ -61,6 +64,7 @@ export function Table({ data, type, dataUpdated, updateItem }: TableProps) {
         variant: "error",
       });
     }
+    setIsSubmitting(false);
   }
 
   async function handleUpdate(item: dataProps) {
@@ -105,6 +109,7 @@ export function Table({ data, type, dataUpdated, updateItem }: TableProps) {
                 <RemoveConfirmationDialog
                   handleRemove={() => handleDelete(item.id)}
                   transactionName={item.description}
+                  isSubmitting={isSubmitting}
                 />
               </button>
             </TableCell>

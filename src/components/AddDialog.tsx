@@ -13,6 +13,7 @@ import {
 
 import { FaPlus } from "react-icons/fa";
 import { DolarInput } from "./DolarInput";
+import { Button } from "./Button";
 
 interface SubmitProps {
   desc: string;
@@ -41,6 +42,7 @@ type AddDialogProps = {
   resetFields: () => void;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isSubmitting: boolean;
 };
 
 export function AddDialog({
@@ -57,6 +59,7 @@ export function AddDialog({
   resetFields,
   isOpen,
   setIsOpen,
+  isSubmitting,
 }: AddDialogProps) {
   function handleSubmit() {
     onSubmit({ desc: description, amt: amount });
@@ -114,22 +117,22 @@ export function AddDialog({
           />
         </form>
         <DialogFooter className="w-full flex flex-row gap-2">
-          <button
+          <Button
             type="button"
-            className="text-white bg-violet-500 p-2 rounded-full w-full"
+            variant="save"
+            title={id ? "Update" : "Create"}
             onClick={id ? handleUpdate : handleSubmit}
-          >
-            {id ? "Update" : "Create"}
-          </button>
-          <button
+            className="w-full p-2"
+            isLoading={isSubmitting}
+          />
+
+          <Button
+            title="Cancel"
+            variant="cancel"
             type="button"
-            className={`text-white bg-zinc-300 p-2 rounded-full w-1/3 ${
-              id ? "block" : "hidden"
-            }`}
             onClick={resetFields}
-          >
-            Cancel
-          </button>
+            className={`w-1/3 p-2 ${id ? "block" : "hidden"}`}
+          />
         </DialogFooter>
       </DialogContent>
     </Dialog>

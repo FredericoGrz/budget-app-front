@@ -13,6 +13,7 @@ import { Select } from "../components/Select";
 import { useMediaQuery } from "react-responsive";
 import { DolarInput } from "../components/DolarInput";
 import { Skeleton } from "../components/ui/skeleton";
+import { Button } from "../components/Button";
 
 type datafechedProps = {
   id: number;
@@ -36,6 +37,7 @@ function Dashboard() {
   const [budgetAvailable, setBudgetAvailable] = useState(0);
   const [addDialogIsOpen, setAddDialogIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isLg = useMediaQuery({ minWidth: 1024 });
 
@@ -48,6 +50,7 @@ function Dashboard() {
   async function handleSubmit({ desc, amt }: { desc: string; amt: number }) {
     if (validate(desc, amt)) {
       try {
+        setIsSubmitting(true);
         await api.post(type, { description: desc, value: amt });
         toast({
           title: "Success",
@@ -79,6 +82,7 @@ function Dashboard() {
         variant: "error",
       });
     }
+    setIsSubmitting(false);
   }
 
   function resetFields() {
@@ -102,6 +106,7 @@ function Dashboard() {
   }) {
     if (validate(desc, amt)) {
       try {
+        setIsSubmitting(true);
         await api.put(`${type}/${id}`, {
           description: desc,
           value: amt,
@@ -137,6 +142,7 @@ function Dashboard() {
         variant: "error",
       });
     }
+    setIsSubmitting(false);
   }
 
   function onIncomeUpdated() {
@@ -312,6 +318,7 @@ function Dashboard() {
                 resetFields={resetFields}
                 isOpen={addDialogIsOpen}
                 setIsOpen={setAddDialogIsOpen}
+                isSubmitting={isSubmitting}
               />
             )}
           </div>
@@ -347,27 +354,29 @@ function Dashboard() {
             onValueChange={(value) => setAmount(Number(value))}
           />
           <div className="w-full flex gap-2">
-            <button
+            <Button
               type="button"
-              className="w-full text-white bg-violet-500 p-4 rounded-full hover:scale-105 transition-transform"
+              title={id ? "Update" : "Create"}
+              variant="save"
+              className="w-full hover:scale-105 transition-transform"
+              isLoading={isSubmitting}
               onClick={
                 id
                   ? () =>
                       handleUpdate({ id, desc: description, amt: amount, type })
                   : () => handleSubmit({ desc: description, amt: amount })
               }
-            >
-              {id ? "Update" : "Create"}
-            </button>
-            <button
+            />
+
+            <Button
               type="button"
-              className={`w-1/3 text-white bg-zinc-400 p-4 rounded-full hover:scale-105 transition-transform ${
+              variant="cancel"
+              onClick={resetFields}
+              title="Cancel"
+              className={`w-1/3 hover:scale-105 transition-transform ${
                 id ? "block" : "hidden"
               }`}
-              onClick={resetFields}
-            >
-              Cancel
-            </button>
+            />
           </div>
         </form>
       </div>

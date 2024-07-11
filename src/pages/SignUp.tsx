@@ -8,6 +8,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useToast } from "../components/ui/use-toast";
 import { CustomError } from "../types/errorTypes";
 import budgetLogo from "../assets/budget-app-logo.png";
+import { Button } from "../components/Button";
+import { useState } from "react";
 
 interface IFormInputs {
   name: string;
@@ -30,6 +32,7 @@ const schema = yup.object().shape({
 function SignUp() {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -40,6 +43,7 @@ function SignUp() {
 
   const onSubmit = async (newUser: IFormInputs) => {
     try {
+      setIsLoading(true);
       await api.post("users", newUser);
       toast({
         title: "Success",
@@ -59,6 +63,8 @@ function SignUp() {
         variant: "error",
       });
     }
+
+    setIsLoading(false);
   };
 
   return (
@@ -104,12 +110,12 @@ function SignUp() {
             error={errors.password ? errors.password.message : ""}
             variant="dark"
           />
-          <button
+          <Button
+            title="Create Account"
             type="submit"
-            className="text-zinc-50 bg-zinc-800 p-4 text-center rounded-3xl"
-          >
-            Create Account
-          </button>
+            variant="dark"
+            isLoading={isLoading}
+          />
         </form>
         <div className="flex flex-col gap-5 px-4 w-full">
           <Link

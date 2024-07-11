@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuth } from "../hooks/use-auth";
 import budgetLogo from "../assets/budget-app-logo.png";
+import { Button } from "../components/Button";
+import { useState } from "react";
 
 interface IFormInputs {
   email: string;
@@ -19,6 +21,7 @@ const schema = yup.object().shape({
 
 function Login() {
   const { signIn } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -29,6 +32,7 @@ function Login() {
   });
 
   const onSubmit = (user: IFormInputs) => {
+    setIsLoading(true);
     signIn(user);
   };
 
@@ -62,12 +66,13 @@ function Login() {
             error={errors.password ? errors.password.message : ""}
           />
           <div className="flex flex-col gap-5 w-full">
-            <button
+            <Button
+              title="Login"
+              variant="dark"
               onClick={handleSubmit(onSubmit)}
-              className="text-zinc-50 bg-zinc-800 p-4 text-center rounded-3xl"
-            >
-              Login
-            </button>
+              isLoading={isLoading}
+            />
+
             <Link
               to="/signup"
               className="text-zinc-800 bg-zinc-50 p-4 text-center border-zinc-800 border shadow-lg rounded-3xl"

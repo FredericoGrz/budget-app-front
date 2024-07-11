@@ -9,15 +9,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
+import { Button } from "./Button";
 
 type removeConfirmationDialogProps = {
   transactionName: string;
   handleRemove: () => void;
+  isSubmitting: boolean;
 };
 
 export function RemoveConfirmationDialog({
   transactionName,
   handleRemove,
+  isSubmitting = false,
 }: removeConfirmationDialogProps) {
   return (
     <Dialog>
@@ -34,20 +37,21 @@ export function RemoveConfirmationDialog({
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="mt-2 flex flex-row gap-2 justify-end items-center">
-          <button
+          <Button
             type="button"
-            className="text-white bg-red-500 p-2 rounded-xl w-2/3 lg:w-full hover:bg-red-600 transition-colors"
+            title="Delete"
+            variant="delete"
+            className="p-2 rounded-xl w-2/3 lg:w-full"
             onClick={handleRemove}
-          >
-            Delete
-          </button>
+            isLoading={isSubmitting}
+          />
           <DialogClose className="w-1/3">
-            <button
+            <Button
               type="button"
-              className="text-white bg-violet-300 p-2 rounded-xl w-full hover:bg-violet-400 transition-colors"
-            >
-              Cancel
-            </button>
+              title="Cancel"
+              variant="cancel"
+              className="p-2 rounded-xl w-full"
+            />
           </DialogClose>
         </DialogFooter>
       </DialogContent>
