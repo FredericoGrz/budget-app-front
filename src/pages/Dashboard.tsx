@@ -52,6 +52,7 @@ function Dashboard() {
       try {
         setIsSubmitting(true);
         await api.post(type, { description: desc, value: amt });
+
         toast({
           title: "Success",
           description: `${
@@ -65,8 +66,9 @@ function Dashboard() {
         if (type === "expenses") fetchExpenses();
         else fetchIncomes();
       } catch (error) {
-        console.log(error);
         const typedError = error as CustomError;
+        console.log(error);
+        console.log(typedError.response);
         const errorMessage = typedError.response?.data?.message;
 
         toast({
