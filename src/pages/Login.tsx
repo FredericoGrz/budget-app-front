@@ -31,9 +31,10 @@ function Login() {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (user: IFormInputs) => {
+  const onSubmit = async (user: IFormInputs) => {
     setIsLoading(true);
-    signIn(user);
+    await signIn(user);
+    setIsLoading(false);
   };
 
   return (
