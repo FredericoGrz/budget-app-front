@@ -8,6 +8,7 @@ export const api = axios.create({
     'Accept': 'application/json, text/plain, */*',
     'Content-Type': 'application/json'
   },
+  withCredentials: true
 })
 
 api.interceptors.response.use(
