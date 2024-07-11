@@ -7,6 +7,11 @@ type CardMoneyProps = {
 };
 
 export function CardMoney({ value, type, className = "" }: CardMoneyProps) {
+  const formattedValue = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(value);
+
   return (
     <Card className={`shadow-lg ${className}`}>
       <CardHeader className="text-center flex flex-col gap-1 xs:gap-3">
@@ -22,7 +27,7 @@ export function CardMoney({ value, type, className = "" }: CardMoneyProps) {
             type === "spent" ? "yellow" : "green"
           }-700 text-base xs:text-lg sm:text-xl font-medium`}
         >
-          $ {value.toFixed(2)}
+          {formattedValue}
         </CardDescription>
       </CardHeader>
     </Card>
