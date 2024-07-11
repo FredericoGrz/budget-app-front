@@ -5,7 +5,8 @@ const apiUrl = import.meta.env.VITE_BACKEND_BASE_URL;
 export const api = axios.create({
   baseURL: apiUrl,
   headers: {
-    'Content-Type': 'application/json',
+    'Accept': 'application/json, text/plain, */*',
+    'Content-Type': 'application/json'
   },
 })
 
