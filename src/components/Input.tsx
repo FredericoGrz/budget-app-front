@@ -26,8 +26,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         <label
           htmlFor={label}
           className={`font-medium ${
-            variant === "default" ? "text-violet-700" : "text-zinc-700"
-          } ${error && "text-red-600"}`}
+            error
+              ? "text-red-600"
+              : variant === "default"
+              ? "text-violet-700"
+              : "text-zinc-700"
+          }`}
         >
           {label}
         </label>
