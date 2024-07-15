@@ -9,11 +9,11 @@ import { Tabs } from "../components/Tabs";
 import { format } from "date-fns";
 import { AddDialog } from "../components/AddDialog";
 import { Input } from "../components/Input";
-import { Select } from "../components/Select";
 import { useMediaQuery } from "react-responsive";
 import { DolarInput } from "../components/DolarInput";
 import { Skeleton } from "../components/ui/skeleton";
 import { Button } from "../components/Button";
+import { TypeSelector } from "../components/TypeSelector";
 
 type datafechedProps = {
   id: number;
@@ -58,18 +58,33 @@ function Dashboard() {
   }
 
   function onAmountChange(value: number | undefined) {
+    if (value !== undefined) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors.amount; // Remove the 'amount' property
+        return newErrors;
+      });
+      setAmount(Number(value));
+    } else setAmount(0);
+  }
+
+  function onTypeChange(value: "expenses" | "incomes") {
     setErrors((prev) => {
       const newErrors = { ...prev };
-      delete newErrors.amount; // Remove the 'amount' property
+      delete newErrors.type; // Remove the 'type' property
       return newErrors;
     });
-    setAmount(Number(value));
+    setType(value);
   }
 
   function validate(desc: string, amt: number) {
     let retorno = true;
     let err = {};
 
+    if (type === "") {
+      err = { ...err, type: "Type must be selected" };
+      retorno = false;
+    }
     if (desc === "") {
       err = { ...err, description: "Field is required" };
 
@@ -357,7 +372,7 @@ function Dashboard() {
                 amount={amount}
                 setDescription={onDescriptionChange}
                 setAmount={onAmountChange}
-                setType={setType}
+                setType={onTypeChange}
                 onUpdate={handleUpdate}
                 onSubmit={handleSubmit}
                 resetFields={resetFields}
@@ -377,15 +392,12 @@ function Dashboard() {
           <p className={`text-lg text-violet-500 -mt-10 ${id ? "" : "hidden"}`}>
             {id && type.charAt(0).toUpperCase() + type.slice(1)}
           </p>
-          <Select
+
+          <TypeSelector
+            type={type}
+            setType={onTypeChange}
             className={id ? "hidden" : ""}
-            label="Type"
-            items={[
-              { label: "Expense", value: "expenses" },
-              { label: "Income", value: "incomes" },
-            ]}
-            onChange={(type: datafechedProps["type"]) => setType(type)}
-            value={type}
+            error={errors.type && errors.type}
           />
           <Input
             label="Description"

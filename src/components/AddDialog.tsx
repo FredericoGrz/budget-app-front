@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { Input } from "./Input";
-import { Select } from "./Select";
 import {
   Dialog,
   DialogContent,
@@ -14,6 +13,7 @@ import {
 import { FaPlus } from "react-icons/fa";
 import { DolarInput } from "./DolarInput";
 import { Button } from "./Button";
+import { TypeSelector } from "./TypeSelector";
 
 interface SubmitProps {
   desc: string;
@@ -37,7 +37,7 @@ type AddDialogProps = {
   amount: number;
   setAmount: (value: number | undefined) => void;
   type: "expenses" | "incomes" | "";
-  setType: React.Dispatch<React.SetStateAction<"expenses" | "incomes" | "">>;
+  setType: (value: "expenses" | "incomes") => void;
   id: number;
   resetFields: () => void;
   isOpen: boolean;
@@ -100,14 +100,11 @@ export function AddDialog({
           </DialogDescription>
         </DialogHeader>
         <form action="" className="flex flex-col gap-2">
-          <Select
+          <TypeSelector
+            type={type}
+            setType={setType}
             className={id ? "hidden" : ""}
-            label="Type"
-            items={[
-              { label: "Expense", value: "expenses" },
-              { label: "Income", value: "incomes" },
-            ]}
-            onChange={(type) => setType(type)}
+            error={errors?.type && errors.type}
           />
           <Input
             label="Description"
