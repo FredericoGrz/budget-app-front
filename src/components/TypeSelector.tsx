@@ -1,4 +1,5 @@
 import { MdOutlineWarning } from "react-icons/md";
+import { BsGraphUpArrow, BsGraphDownArrow } from "react-icons/bs";
 
 type TypeSelectorProps = {
   type: "expenses" | "incomes" | "";
@@ -24,7 +25,7 @@ export function TypeSelector({
         <button
           type="button"
           onClick={() => setType("expenses")}
-          className={`w-1/2 p-4 rounded-l-xl ${
+          className={`w-1/2 p-4 flex items-center  justify-center gap-2 rounded-l-xl ${
             error
               ? "bg-violet-50 text-red-600 border border-red-600 border-r-transparent"
               : type === "expenses"
@@ -32,12 +33,12 @@ export function TypeSelector({
               : "bg-violet-100 text-violet-600"
           } `}
         >
-          Expense
+          <BsGraphDownArrow className="text-lg" /> Expense
         </button>
         <button
           type="button"
           onClick={() => setType("incomes")}
-          className={`w-1/2 p-4 rounded-r-xl ${
+          className={`w-1/2 p-4 flex items-center justify-center gap-2 rounded-r-xl ${
             error
               ? "bg-violet-50 text-red-600 border border-red-600 border-l-transparent"
               : type === "incomes"
@@ -45,7 +46,7 @@ export function TypeSelector({
               : "bg-violet-100 text-violet-600"
           } `}
         >
-          Income
+          <BsGraphUpArrow className="text-lg" /> Income
         </button>
       </div>
       <div className={error ? "flex gap-1 items-center" : "hidden"}>
