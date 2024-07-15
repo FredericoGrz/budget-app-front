@@ -25,6 +25,12 @@ type datafechedProps = {
   type: "expenses" | "incomes" | "";
 };
 
+type errorProps = {
+  type?: string;
+  description?: string;
+  amount?: string;
+};
+
 function Dashboard() {
   const { toast } = useToast();
   const [incomes, setIncomes] = useState<datafechedProps[]>([]);
@@ -38,13 +44,50 @@ function Dashboard() {
   const [addDialogIsOpen, setAddDialogIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<errorProps>({});
 
   const isLg = useMediaQuery({ minWidth: 1024 });
 
+  function onDescriptionChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setErrors((prev) => {
+      const newErrors = { ...prev };
+      delete newErrors.description; // Remove the 'description' property
+      return newErrors;
+    });
+    setDescription(e.target.value);
+  }
+
+  function onAmountChange(value: number | undefined) {
+    setErrors((prev) => {
+      const newErrors = { ...prev };
+      delete newErrors.amount; // Remove the 'amount' property
+      return newErrors;
+    });
+    setAmount(Number(value));
+  }
+
   function validate(desc: string, amt: number) {
-    if (desc === "") return false;
-    else if (amt === 0) return false;
-    return true;
+    let retorno = true;
+    let err = {};
+
+    if (desc === "") {
+      err = { ...err, description: "Field is required" };
+
+      retorno = false;
+    }
+    if (amt === 0 || amt === undefined) {
+      err = { ...err, amount: "Amount must be greater than zero" };
+      retorno = false;
+    }
+
+    setErrors((prev) => {
+      return {
+        ...prev,
+        ...err,
+      };
+    });
+
+    return retorno;
   }
 
   async function handleSubmit({ desc, amt }: { desc: string; amt: number }) {
@@ -312,8 +355,8 @@ function Dashboard() {
                 type={type}
                 description={description}
                 amount={amount}
-                setDescription={setDescription}
-                setAmount={setAmount}
+                setDescription={onDescriptionChange}
+                setAmount={onAmountChange}
                 setType={setType}
                 onUpdate={handleUpdate}
                 onSubmit={handleSubmit}
@@ -321,6 +364,7 @@ function Dashboard() {
                 isOpen={addDialogIsOpen}
                 setIsOpen={setAddDialogIsOpen}
                 isSubmitting={isSubmitting}
+                errors={errors}
               />
             )}
           </div>
@@ -347,13 +391,15 @@ function Dashboard() {
             label="Description"
             name="description"
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={onDescriptionChange}
+            error={errors.description && errors.description}
           />
           <DolarInput
             label="Amount"
             name="amount"
             value={amount}
-            onValueChange={(value) => setAmount(Number(value))}
+            onValueChange={(value) => onAmountChange(value)}
+            error={errors.amount && errors.amount}
           />
           <div className="w-full flex gap-2">
             <Button

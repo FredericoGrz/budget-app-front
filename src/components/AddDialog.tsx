@@ -33,9 +33,9 @@ type AddDialogProps = {
   onSubmit: (props: SubmitProps) => void;
   isUpdate?: boolean;
   description: string;
-  setDescription: React.Dispatch<React.SetStateAction<string>>;
+  setDescription: (e: React.ChangeEvent<HTMLInputElement>) => void;
   amount: number;
-  setAmount: React.Dispatch<React.SetStateAction<number>>;
+  setAmount: (value: number | undefined) => void;
   type: "expenses" | "incomes" | "";
   setType: React.Dispatch<React.SetStateAction<"expenses" | "incomes" | "">>;
   id: number;
@@ -43,6 +43,11 @@ type AddDialogProps = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isSubmitting: boolean;
+  errors?: {
+    type?: string;
+    description?: string;
+    amount?: string;
+  };
 };
 
 export function AddDialog({
@@ -60,6 +65,7 @@ export function AddDialog({
   isOpen,
   setIsOpen,
   isSubmitting,
+  errors,
 }: AddDialogProps) {
   function handleSubmit() {
     onSubmit({ desc: description, amt: amount });
@@ -107,13 +113,15 @@ export function AddDialog({
             label="Description"
             name="description"
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={setDescription}
+            error={errors?.description && errors.description}
           />
           <DolarInput
             label="Amount"
             name="amount"
             value={amount}
-            onValueChange={(value) => setAmount(Number(value))}
+            onValueChange={setAmount}
+            error={errors?.amount && errors.amount}
           />
         </form>
         <DialogFooter className="w-full flex flex-row gap-2">
