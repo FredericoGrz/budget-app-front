@@ -7,13 +7,14 @@ import {
 
 type TabsProps = {
   defaultValue: string;
+  onTabChange: (value: string) => void;
   contents: {
     value: string;
     content: React.ReactNode;
   }[];
 };
 
-export function Tabs({ defaultValue, contents }: TabsProps) {
+export function Tabs({ defaultValue, contents, onTabChange }: TabsProps) {
   return (
     <TabsShad defaultValue={defaultValue.toLowerCase()}>
       <TabsList>
@@ -21,6 +22,7 @@ export function Tabs({ defaultValue, contents }: TabsProps) {
           <TabsTrigger
             key={content.value.toLowerCase()}
             value={content.value.toLowerCase()}
+            onClick={() => onTabChange(content.value)}
           >
             {content.value}
           </TabsTrigger>

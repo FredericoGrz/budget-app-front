@@ -45,6 +45,7 @@ function Dashboard() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<errorProps>({});
+  const [tabSelected, setTabSelected] = useState("expense");
 
   const isLg = useMediaQuery({ minWidth: 1024 });
 
@@ -362,7 +363,11 @@ function Dashboard() {
           </div>
         ) : (
           <div className="relative col-span-2 lg:col-span-8">
-            <Tabs defaultValue="expense" contents={generateTabContents()} />
+            <Tabs
+              defaultValue={tabSelected}
+              onTabChange={(value: string) => setTabSelected(value)}
+              contents={generateTabContents()}
+            />
             {!isLg && (
               <AddDialog
                 className="absolute top-0 right-4 lg:hidden"
