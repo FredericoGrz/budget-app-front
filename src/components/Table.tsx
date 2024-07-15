@@ -101,11 +101,11 @@ export function Table({ data, type, dataUpdated, updateItem }: TableProps) {
               {item.created_at}
             </TableCell>
             <TableCell className="text-xs sm:text-sm">$ {item.value}</TableCell>
-            <TableCell className="flex gap-2 ">
+            <TableCell className="flex gap-2 items-center">
               <button type="button" onClick={() => handleUpdate(item)}>
                 <FaEdit className="text-lg text-blue-400 hover:text-blue-600 hover:scale-110 transition-all" />
               </button>
-              <button type="button">
+              <button type="button" className="-mt-1">
                 <RemoveConfirmationDialog
                   handleRemove={() => handleDelete(item.id)}
                   transactionName={item.description}
