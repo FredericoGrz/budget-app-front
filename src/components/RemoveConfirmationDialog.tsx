@@ -11,7 +11,7 @@ import {
 } from "./ui/dialog";
 import { Button } from "./Button";
 
-type removeConfirmationDialogProps = {
+type RemoveConfirmationDialogProps = {
   transactionName: string;
   handleRemove: () => void;
   isSubmitting: boolean;
@@ -21,11 +21,13 @@ export function RemoveConfirmationDialog({
   transactionName,
   handleRemove,
   isSubmitting = false,
-}: removeConfirmationDialogProps) {
+}: RemoveConfirmationDialogProps) {
   return (
     <Dialog>
-      <DialogTrigger>
-        <FaTrash className="text-lg text-red-400 hover:text-red-600 mt-1 hover:scale-110 transition-all" />
+      <DialogTrigger asChild>
+        <span className="cursor-pointer">
+          <FaTrash className="text-lg text-red-400 hover:text-red-600 mt-1 hover:scale-110 transition-all" />
+        </span>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -45,13 +47,15 @@ export function RemoveConfirmationDialog({
             onClick={handleRemove}
             isLoading={isSubmitting}
           />
-          <DialogClose className="w-1/3">
-            <Button
-              type="button"
-              title="Cancel"
-              variant="cancel"
-              className="p-2 rounded-xl w-full"
-            />
+          <DialogClose asChild>
+            <span className="w-1/3 cursor-pointer">
+              <Button
+                type="button"
+                title="Cancel"
+                variant="cancel"
+                className="p-2 rounded-xl w-full"
+              />
+            </span>
           </DialogClose>
         </DialogFooter>
       </DialogContent>
